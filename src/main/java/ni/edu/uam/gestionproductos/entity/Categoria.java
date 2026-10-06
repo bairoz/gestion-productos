@@ -1,6 +1,9 @@
 package ni.edu.uam.gestionproductos.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "categoria")
@@ -15,6 +18,11 @@ public class Categoria {
 
     @Column(nullable = false)
     private boolean activa = true;
+
+    // Relación Uno a Muchos con Producto
+    @OneToMany(mappedBy = "categoria")
+    @JsonIgnoreProperties("categoria") // Evita que se genere un bucle infinito
+    private List<Producto> productos = new ArrayList<>();
 
     // Constructores
     public Categoria() {
@@ -49,5 +57,13 @@ public class Categoria {
 
     public void setActiva(boolean activa) {
         this.activa = activa;
+    }
+
+    public List<Producto> getProductos() {
+        return productos;
+    }
+
+    public void setProductos(List<Producto> productos) {
+        this.productos = productos;
     }
 }

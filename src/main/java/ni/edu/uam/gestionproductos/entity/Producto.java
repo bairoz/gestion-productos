@@ -1,5 +1,6 @@
 package ni.edu.uam.gestionproductos.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.util.HashSet;
@@ -19,8 +20,10 @@ public class Producto {
     @Column(nullable = false, length = 150)
     private String nombre;
 
+    // Relación con Categoría (evita bucles en el JSON)
     @ManyToOne
     @JoinColumn(name = "categoria_id", nullable = false)
+    @JsonIgnoreProperties("productos")
     private Categoria categoria;
 
     @Column(name = "precio_venta", nullable = false, precision = 12, scale = 2)
@@ -29,16 +32,16 @@ public class Producto {
     @Column(nullable = false)
     private int existencia;
 
-    // Campo agregado para la Migración V2
+    // Campo de la Migración V2
     @Column(length = 500)
     private String descripcion;
 
-    // Campo agregado para la relación con Proveedor (Reto Final Practica 1)
+    // Relación con Proveedor (Reto Final Practica 1)
     @ManyToOne
     @JoinColumn(name = "proveedor_id")
     private Proveedor proveedor;
 
-    // Relación Muchos a Muchos con Etiqueta (Paso 12 / Practica 2)
+    // Relación Muchos a Muchos con Etiqueta (Practica 2)
     @ManyToMany
     @JoinTable(
             name = "producto_etiqueta",
@@ -47,7 +50,7 @@ public class Producto {
     )
     private Set<Etiqueta> etiquetas = new HashSet<>();
 
-    // Constructores
+    // Constructor vacío
     public Producto() {
     }
 
